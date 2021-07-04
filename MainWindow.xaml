@@ -1,0 +1,99 @@
+﻿<Window x:Class="bili_msg_management.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:bili_msg_management"
+        mc:Ignorable="d"
+        Title="Bilibili Message Management" Height="900" Width="1600" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ContextMenu x:Key="ListViewItemContextMenu">
+            <MenuItem Header = "拷贝" Click="OnCopy"/>
+        </ContextMenu>
+    </Window.Resources>
+
+
+    <Grid>
+
+
+        <TextBox HorizontalAlignment="Left" Height="101" Margin="777,72,0,0" TextWrapping="Wrap" Text="" IsReadOnly="True" BorderThickness="2" VerticalAlignment="Top" Width="101"/>
+
+        <ListView x:Name="msglistview" Margin="50,243,50,20"  PreviewMouseRightButtonDown = "ListView_PreviewMouseRightButtonDown"
+                          ItemsSource="{Binding PartScans, UpdateSourceTrigger=PropertyChanged}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Auto"  >
+            <ListView.ItemContainerStyle>
+                <Style TargetType = "{x:Type ListViewItem}"  >
+                    <Setter Property="ContextMenu" Value="{StaticResource ListViewItemContextMenu}"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Tag="{Binding uid}" Click="cbxxxx_Clicked" Width="20"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding num}" Header="No." Width="50"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding stat}" Header="未读" Width="80"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding uid}" Header="talk_id" Width="100"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding uname}" Header="昵称" Width="150" />
+                    <GridViewColumn DisplayMemberBinding="{Binding utime}" Header="私信时间" Width="170" />
+                    <GridViewColumn DisplayMemberBinding="{Binding isfollower}" Header="我的关注" Width="80" />
+                    <GridViewColumn Width="80" Header="查看对话">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Tag="{Binding uid}" Click="show_msg_detail" Width="60" Height="20" Content="Click" FontSize="10"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding msg}" Header="私信内容"  Width="6000" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Button Content="获取消息" HorizontalAlignment="Left" Height="32"  Margin="616,28,0,0" VerticalAlignment="Top" Width="100" Click="get_bili_msg_click" FontSize="16" ToolTip="点击获取消息"/>
+        <Button Content="导出选中" HorizontalAlignment="Left" Height="40" Margin="407,183,0,0" VerticalAlignment="Top" Width="100" FontSize="16" Click="output_checked"/>
+        <Button Content="导出全部" HorizontalAlignment="Left" Height="40" Margin="565,183,0,0" VerticalAlignment="Top" Width="100" FontSize="16" Click="output_all" />
+        <Button Content="设为已读" HorizontalAlignment="Left" Height="40" Margin="50,183,0,0" VerticalAlignment="Top" Width="100" FontSize="16" Click="set_checked_read"/>
+        <Button Content="全部设为已读" HorizontalAlignment="Left" Height="40" Margin="205,183,0,0" VerticalAlignment="Top" Width="140" FontSize="16" Click="set_unread_read"/>
+
+        <TextBlock HorizontalAlignment="Left" Margin="50,34,0,0" TextWrapping="Wrap" Text="Cookie:" VerticalAlignment="Top" Height="31" Width="100" FontSize="16"/>
+        <TextBox x:Name="bcookietxt" HorizontalAlignment="Left" Height="22" Margin="138,34,0,0" TextWrapping="Wrap" Text="" ToolTip="请在此处输入Cookie" VerticalAlignment="Top" Width="447" FontSize="16"/>
+
+
+        <Image x:Name="face" HorizontalAlignment="Left" Height="115" Margin="770,65,0,0" VerticalAlignment="Top" Width="114"/>
+        <TextBlock x:Name="tbid" HorizontalAlignment="Left" Margin="926,57,0,0" TextWrapping="Wrap" Text="昵称:" VerticalAlignment="Top" Height="20" Width="40" FontSize="16"/>
+        <TextBlock x:Name="tbfans" HorizontalAlignment="Left" Margin="926,97,0,0" TextWrapping="Wrap" Text="粉丝数:" VerticalAlignment="Top" Height="20" Width="60" FontSize="16"/>
+        <TextBlock x:Name="tbfl" HorizontalAlignment="Left" Margin="926,137,0,0" TextWrapping="Wrap" Text="关注数:" VerticalAlignment="Top" Height="20" Width="60" FontSize="16"/>
+        <TextBlock x:Name="tbmsgn" HorizontalAlignment="Left" Margin="926,177,0,0" TextWrapping="Wrap" Text="未读消息:" VerticalAlignment="Top" Height="20" Width="73" FontSize="16"/>
+        <TextBlock x:Name="tid" HorizontalAlignment="Left" Margin="1006,57,0,0" TextWrapping="Wrap" Text="Loading" VerticalAlignment="Top" Height="20" Width="100" FontSize="16"/>
+        <TextBlock x:Name="tfans" HorizontalAlignment="Left" Margin="1006,97,0,0" TextWrapping="Wrap" Text="Loading" VerticalAlignment="Top" Height="20" Width="100" FontSize="16"/>
+        <TextBlock x:Name="tfl" HorizontalAlignment="Left" Margin="1006,137,0,0" TextWrapping="Wrap" Text="Loading" VerticalAlignment="Top" Height="20" Width="100" FontSize="16"/>
+        <TextBlock x:Name="tmsgn" HorizontalAlignment="Left" Margin="1006,177,0,0" TextWrapping="Wrap" Text="Loading" VerticalAlignment="Top" Height="20" Width="100" FontSize="16"/>
+
+
+        <TabControl x:Name="TabControl" Margin="1150,10,50,654">
+            <TabItem Header="日志">
+                <TextBox x:Name="log" FontSize="12"  TextWrapping="Wrap" DockPanel.Dock="Top"   IsReadOnly="True"  VerticalScrollBarVisibility="Auto" />
+            </TabItem>
+        </TabControl>
+
+        <TextBox HorizontalAlignment="Left" Height="61" Margin="131,91,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="592" IsEnabled="False"/>
+        <CheckBox x:Name="advantimeset" Content="时间段限制" HorizontalAlignment="Left" Margin="142,113,0,0" VerticalAlignment="Top"  FontSize="16"/>
+        <CheckBox x:Name="advanunreadmsg" Content="仅显示未读" HorizontalAlignment="Left" Margin="485,113,0,0" VerticalAlignment="Top"  FontSize="16"/>
+        <CheckBox x:Name="advanfanmsg" Content="仅显示我关注" HorizontalAlignment="Left" Margin="595,113,0,0" VerticalAlignment="Top"  FontSize="16"/>
+        <TextBlock HorizontalAlignment="Left" Margin="50,112,0,0" TextWrapping="Wrap" Text="高级选项:" VerticalAlignment="Top" Height="31" Width="100" FontSize="16"/>
+        <TextBlock HorizontalAlignment="Left" Margin="360,111,0,0" TextWrapping="Wrap" Text="-" VerticalAlignment="Top" Height="24" Width="11" FontSize="16" RenderTransformOrigin="0.353,0.417"/>
+        <DatePicker x:Name="startdata" HorizontalAlignment="Left" Margin="247,108,0,0" VerticalAlignment="Top" FontSize="16" RenderTransformOrigin="0.398,0.536"/>
+        <DatePicker x:Name="enddata" HorizontalAlignment="Left" Margin="371,108,0,0" VerticalAlignment="Top" FontSize="16"/>
+
+
+
+        <Button HorizontalAlignment="Right" Height="20" Width="12" Margin="0,3,3,0" Content="i" VerticalAlignment="Top" Click="show_info_author"/>
+
+
+
+    </Grid>
+</Window>
